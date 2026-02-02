@@ -11,25 +11,25 @@ public class Quest {
     @Column(name = "id", nullable = false)
     private String id;
 
-    @Column(name = "kind")
+    @Column(name = "kind", columnDefinition = "TEXT")
     private String kind;
 
-    @Column(name = "titre")
+    @Column(name = "titre", columnDefinition = "TEXT")
     private String titre;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "lieu")
+    @Column(name = "lieu", columnDefinition = "TEXT")
     private String lieu;
 
-    @Column(name = "ennemi")
+    @Column(name = "ennemi", columnDefinition = "TEXT")
     private String ennemi;
 
-    @Column(name = "priorite")
+    @Column(name = "priorite", columnDefinition = "TEXT")
     private String priorite; //todo: enum
 
-    @Column(name = "recompense")
+    @Column(name = "recompense", columnDefinition = "TEXT")
     private String recompense;
     // private object durée estimée
 

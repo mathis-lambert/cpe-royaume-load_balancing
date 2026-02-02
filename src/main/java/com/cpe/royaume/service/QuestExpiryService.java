@@ -29,8 +29,9 @@ public class QuestExpiryService {
     }
 
     private boolean isQuestExpired(Quest quest) {
+        LOGGER.info("Checking if quest {} is expired, Checking deadline {}", quest.getId(), quest.getDelaiLimite());
         LocalDateTime now = LocalDateTime.now();
-        return quest.getDelaiLimite().isAfter(now);
+        return now.isAfter(quest.getDelaiLimite());
     }
 
     public void schedule(Quest quest) {
