@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: royaume
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+    networks:
+      - royaume-db
+
+volumes:
+  pgdata:
+
+networks:
+  royaume-db:
+    driver: bridge
