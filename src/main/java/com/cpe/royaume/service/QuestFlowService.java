@@ -1,10 +1,8 @@
 package com.cpe.royaume.service;
 
-import com.cpe.royaume.domain.EnumStatus;
 import com.cpe.royaume.domain.Quest;
 import com.cpe.royaume.client.RoyalApiClient;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
