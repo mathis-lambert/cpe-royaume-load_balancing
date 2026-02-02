@@ -1,5 +1,6 @@
 package com.cpe.royaume.repository;
 
+import com.cpe.royaume.domain.EnumStatus;
 import com.cpe.royaume.domain.Quest;
 
 import java.time.LocalDateTime;
@@ -10,5 +11,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface QuestRepository extends JpaRepository<Quest, String> {
-    public List<Quest> findByDelaiLimiteGreaterThanEqual(LocalDateTime dateTime);
+    List<Quest> findByDelaiLimiteGreaterThanEqual(LocalDateTime dateTime);
+
+    List<Quest> findByStatus(EnumStatus status);
 }

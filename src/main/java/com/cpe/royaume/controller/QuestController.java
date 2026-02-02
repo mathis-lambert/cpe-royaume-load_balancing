@@ -25,7 +25,7 @@ public class QuestController {
 
     @GetMapping("/quests")
     public List<Quest> getQuests() {
-        return questFlowService.findAllQuests();
+        return questFlowService.findAllPendingQuests();
     }
 
     @PostMapping("/quests/{id}/launch")

@@ -34,7 +34,6 @@ public class QuestFlowService {
         }
 
         questStorageService.save(quest);
-        return;
     }
 
     public void scheduleQuests() {
@@ -58,5 +57,9 @@ public class QuestFlowService {
 
     public List<Quest> findAllQuests() {
         return questStorageService.findAll();
+    }
+
+    public List<Quest> findAllPendingQuests() {
+        return questStorageService.findAllPendingQuests();
     }
 }

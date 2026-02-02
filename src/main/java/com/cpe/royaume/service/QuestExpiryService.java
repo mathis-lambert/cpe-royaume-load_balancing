@@ -1,6 +1,8 @@
 package com.cpe.royaume.service;
 
 import com.cpe.royaume.client.RoyalApiClient;
+import com.cpe.royaume.domain.ApiResponse;
+import com.cpe.royaume.domain.EnumStatus;
 import com.cpe.royaume.domain.Quest;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -15,6 +17,7 @@ public class QuestExpiryService {
 
     private final TaskScheduler taskScheduler;
     private final RoyalApiClient royalService;
+    private final QuestStorageService questStorageService = new QuestStorageService(null);
 
     public QuestExpiryService(TaskScheduler taskScheduler, RoyalApiClient royalService) {
         this.taskScheduler = taskScheduler;
@@ -40,7 +43,11 @@ public class QuestExpiryService {
     private void resolveQuest(String questId) {
         try {
             LOGGER.info("Quest {} has expired", questId);
-            royalService.resolveQuest(questId);
+            ApiResponse resolvedQuest = royalService.resolveQuest(questId);
+            if(resolvedQuest!=null){
+                this.questStorageService.setQuestStatus(questId, EnumStatus.RESOLVED);
+                LOGGER.info("Quest {} resolved with response: {}", questId, resolvedQuest);
+            }
         } catch (Exception e) {
             LOGGER.error("Error while resolving quest {}", questId, e);
         }

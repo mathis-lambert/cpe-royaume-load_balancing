@@ -1,9 +1,7 @@
 package com.cpe.royaume.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -43,6 +41,10 @@ public class Quest {
 
     @Column(name = "longitude")
     private float longitude;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private EnumStatus status = EnumStatus.PENDING;
 
     public Quest() {
         // Default constructor
@@ -134,5 +136,13 @@ public class Quest {
 
     public void setLongitude(float longitude) {
         this.longitude = longitude;
+    }
+
+    public EnumStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EnumStatus status) {
+        this.status = status;
     }
 }
