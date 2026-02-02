@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "quests")
@@ -36,7 +36,7 @@ public class Quest {
     // private object durée estimée
 
     @Column(name = "delai_limite")
-    private Instant delaiLimite;
+    private LocalDateTime delaiLimite;
 
     @Column(name = "latitude")
     private float latitude;
@@ -112,11 +112,11 @@ public class Quest {
         this.recompense = recompense;
     }
 
-    public Instant getDelaiLimite() {
+    public LocalDateTime getDelaiLimite() {
         return delaiLimite;
     }
 
-    public void setDelaiLimite(Instant delaiLimite) {
+    public void setDelaiLimite(LocalDateTime delaiLimite) {
         this.delaiLimite = delaiLimite;
     }
 

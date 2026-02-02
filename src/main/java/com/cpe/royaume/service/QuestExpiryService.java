@@ -2,7 +2,8 @@ package com.cpe.royaume.service;
 
 import com.cpe.royaume.client.RoyalApiClient;
 import com.cpe.royaume.domain.Quest;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.TaskScheduler;
@@ -25,12 +26,15 @@ public class QuestExpiryService {
             return;
         }
 
-        Instant deadline = quest.getDelaiLimite();
-        Instant now = Instant.now();
-        Instant startTime = deadline.isAfter(now) ? deadline : now;
+        LocalDateTime deadline = quest.getDelaiLimite();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startTime = deadline.isAfter(now) ? deadline : now;
         String questId = quest.getId();
 
-        taskScheduler.schedule(() -> resolveQuest(questId), startTime);
+        taskScheduler.schedule(
+                () -> resolveQuest(questId),
+                startTime.atZone(ZoneId.systemDefault()).toInstant()
+        );
     }
 
     private void resolveQuest(String questId) {

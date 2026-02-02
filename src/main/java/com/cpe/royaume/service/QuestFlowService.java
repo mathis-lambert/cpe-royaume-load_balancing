@@ -25,17 +25,38 @@ public class QuestFlowService {
         this.questExpiryService = questExpiryService;
     }
 
-    public List<Quest> runOnce() {
+    public void fetchAndSaveQuests() {
         Quest quest = royalService.getQuests();
 
         if (quest == null) {
             LOGGER.info("No quest returned by RoyalApiClient");
-            return questStorageService.findAll();
+            return;
         }
 
         questStorageService.save(quest);
-        questExpiryService.schedule(quest);
+        return;
+    }
 
+    public void scheduleQuests() {
+        List<Quest> quests = questStorageService.findQuestsToLaunch();
+
+        for (Quest quest : quests) {
+            questExpiryService.schedule(quest);
+        }
+    }
+
+    public void scheduleQuest(String questId) throws Exception {
+        Quest quest = questStorageService.findById(questId);
+
+        if (quest == null) {
+            LOGGER.info("No quest found with id {}", questId);
+            throw new Exception("Quest not found");
+        }
+
+        questExpiryService.schedule(quest);
+    }
+
+    public List<Quest> findAllQuests() {
         return questStorageService.findAll();
     }
 }
