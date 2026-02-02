@@ -26,7 +26,7 @@ public class RoyalService {
         this.group = group;
     }
 
-    public Quest getQuests() {
+    public ApiResponse getQuests() {
         ApiResponse response = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/quests")
@@ -36,7 +36,7 @@ public class RoyalService {
                 .bodyToMono(ApiResponse.class)
                 .block();
         LOGGER.debug("Response from getQuests: {}", response);
-        return response != null ? response.getQuest() : null;
+        return response;
     }
 
     public ApiResponse resolveQuest(final String questId) {
