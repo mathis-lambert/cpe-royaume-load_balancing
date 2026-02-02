@@ -41,24 +41,32 @@ public class RoyaumeController {
 
         questRepository.save(quest);
 
-        Instant currentDate = Instant.now();
+        this.resolveQuest(quest);
 
+        return response;
+    }
+
+    private void resolveQuest(Quest quest) {
+        Instant currentDate = Instant.now();
         // calculate delta in seconds
         if (quest.getDelaiLimite() != null) {
             float delta = (quest.getDelaiLimite().toEpochMilli() - currentDate.toEpochMilli()) / 1000f;
-
-            // asynchronous sleeping for delta seconds
-            new Thread(() -> {
-                try {
-                    Thread.sleep((long) (delta * 1000));
-                    LOGGER.info("Quest {} has expired", quest.getId());
-                    royalService.resolveQuest(quest.getId());
-                } catch (InterruptedException e) {
-                    LOGGER.error("Error while waiting for quest to expire", e);
-                }
-            }).start();
+            waitForDelai(quest, delta);
         }
+    }
 
-        return response;
+    private void waitForDelai(Quest quest, float delta) {
+        // asynchronous sleeping for delta seconds
+        Thread.ofVirtual().start(() -> {
+            try {
+                Thread.sleep((long) (delta * 1000));
+                LOGGER.info("Quest {} has expired", quest.getId());
+                ApiResponse resolveQuest = royalService.resolveQuest(quest.getId());
+                LOGGER.info("Quest {} resolved with response: {}", quest.getId(), resolveQuest);
+            } catch (InterruptedException e) {
+                LOGGER.error("Error while waiting for quest to expire", e);
+                Thread.currentThread().interrupt();
+            }
+        });
     }
 }

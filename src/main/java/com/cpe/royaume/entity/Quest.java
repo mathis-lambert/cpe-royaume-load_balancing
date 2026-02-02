@@ -45,6 +45,7 @@ public class Quest {
     private float longitude;
 
     public Quest() {
+        // Default constructor
     }
 
     public String getId() {
