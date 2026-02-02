@@ -12,7 +12,7 @@ public class QuestAutoScheduler {
         this.questFlowService = questFlowService;
     }
 
-    @Scheduled(fixedDelayString = "${royaume.auto.period-ms:5000}")
+    @Scheduled(fixedDelayString = "${royaume.auto.fetch:30000}")
     public void run() {
         questFlowService.fetchAndSaveQuests();
     }

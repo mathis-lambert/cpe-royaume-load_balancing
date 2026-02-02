@@ -3,8 +3,6 @@ package com.cpe.royaume.service;
 import com.cpe.royaume.domain.EnumStatus;
 import com.cpe.royaume.domain.Quest;
 import com.cpe.royaume.repository.QuestRepository;
-
-import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +19,6 @@ public class QuestStorageService {
             return;
         }
         questRepository.save(quest);
-    }
-
-    public List<Quest> findQuestsToLaunch() {
-        return questRepository.findByDelaiLimiteGreaterThanEqual(LocalDateTime.now());
     }
 
     public List<Quest> findAll() {

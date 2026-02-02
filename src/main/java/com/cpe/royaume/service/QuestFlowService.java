@@ -1,7 +1,10 @@
 package com.cpe.royaume.service;
 
+import com.cpe.royaume.domain.EnumStatus;
 import com.cpe.royaume.domain.Quest;
 import com.cpe.royaume.client.RoyalApiClient;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,17 +30,20 @@ public class QuestFlowService {
 
     public void fetchAndSaveQuests() {
         Quest quest = royalService.getQuests();
-
+        
         if (quest == null) {
             LOGGER.info("No quest returned by RoyalApiClient");
             return;
         }
-
+        
+        quest.setDelaiLimite(quest.getDelaiLimite().plusHours(1));
         questStorageService.save(quest);
     }
 
+
+
     public void scheduleQuests() {
-        List<Quest> quests = questStorageService.findQuestsToLaunch();
+        List<Quest> quests = questStorageService.findAllPendingQuests();
 
         for (Quest quest : quests) {
             questExpiryService.schedule(quest);

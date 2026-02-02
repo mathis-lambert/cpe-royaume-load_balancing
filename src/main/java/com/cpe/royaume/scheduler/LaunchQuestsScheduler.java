@@ -14,7 +14,7 @@ public class LaunchQuestsScheduler {
         this.questFlowService = questFlowService;
     }
 
-    @Scheduled(fixedDelayString = "${royaume.auto.period-ms:5000}")
+    @Scheduled(fixedDelayString = "${royaume.auto.resolve:10000}")
     public void run() {
        questFlowService.scheduleQuests();
     }

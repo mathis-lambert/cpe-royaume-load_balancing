@@ -17,11 +17,20 @@ public class QuestExpiryService {
 
     private final TaskScheduler taskScheduler;
     private final RoyalApiClient royalService;
-    private final QuestStorageService questStorageService = new QuestStorageService(null);
+    private final QuestStorageService questStorageService;
 
-    public QuestExpiryService(TaskScheduler taskScheduler, RoyalApiClient royalService) {
+    public QuestExpiryService(
+            TaskScheduler taskScheduler,
+            RoyalApiClient royalService,
+            QuestStorageService questStorageService) {
         this.taskScheduler = taskScheduler;
         this.royalService = royalService;
+        this.questStorageService = questStorageService;
+    }
+
+    private boolean isQuestExpired(Quest quest) {
+        LocalDateTime now = LocalDateTime.now();
+        return quest.getDelaiLimite().isAfter(now);
     }
 
     public void schedule(Quest quest) {
@@ -29,22 +38,30 @@ public class QuestExpiryService {
             return;
         }
 
+        if (isQuestExpired(quest)) {
+            questStorageService.setQuestStatus(quest.getId(), EnumStatus.EXPIRED);
+            LOGGER.info("Quest {} is already expired", quest.getId());
+            return;
+        }
+
         LocalDateTime deadline = quest.getDelaiLimite();
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startTime = deadline.isAfter(now) ? deadline : now;
+
         String questId = quest.getId();
+
+        LOGGER.info("Scheduling quest {} to be resolved at {}", questId, startTime);
 
         taskScheduler.schedule(
                 () -> resolveQuest(questId),
-                startTime.atZone(ZoneId.systemDefault()).toInstant()
-        );
+                startTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 
     private void resolveQuest(String questId) {
         try {
             LOGGER.info("Quest {} has expired", questId);
             ApiResponse resolvedQuest = royalService.resolveQuest(questId);
-            if(resolvedQuest!=null){
+            if (resolvedQuest != null) {
                 this.questStorageService.setQuestStatus(questId, EnumStatus.RESOLVED);
                 LOGGER.info("Quest {} resolved with response: {}", questId, resolvedQuest);
             }
