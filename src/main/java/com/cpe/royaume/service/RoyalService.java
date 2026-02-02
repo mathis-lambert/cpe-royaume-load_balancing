@@ -17,8 +17,8 @@ public class RoyalService {
     private final String group;
 
     public RoyalService(
-            @Value("${royal.api.base-url}") String baseUrl,
-            @Value("${royal.group}") String group
+            @Value("${royaume.api.url}") String baseUrl,
+            @Value("${royaume.ihm.group}") String group
     ) {
         this.webClient = WebClient.builder()
                 .baseUrl(baseUrl)
