@@ -1,20 +1,51 @@
 package com.cpe.royaume.entity;
 
-import java.util.Date;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.time.Instant;
 
+@Entity
+@Table(name = "quests")
 public class Quest {
+    @Id
+    @Column(name = "id", nullable = false)
     private String id;
+
+    @Column(name = "kind")
     private String kind;
+
+    @Column(name = "titre")
     private String titre;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "lieu")
     private String lieu;
+
+    @Column(name = "ennemi")
     private String ennemi;
+
+    @Column(name = "priorite")
     private String priorite; //todo: enum
+
+    @Column(name = "recompense")
     private String recompense;
     // private object durée estimée
-    private Date delaiLimite;
+
+    @Column(name = "delai_limite")
+    private Instant delaiLimite;
+
+    @Column(name = "latitude")
     private float latitude;
+
+    @Column(name = "longitude")
     private float longitude;
+
+    public Quest() {
+    }
 
     public String getId() {
         return id;
@@ -80,11 +111,11 @@ public class Quest {
         this.recompense = recompense;
     }
 
-    public Date getDelaiLimite() {
+    public Instant getDelaiLimite() {
         return delaiLimite;
     }
 
-    public void setDelaiLimite(Date delaiLimite) {
+    public void setDelaiLimite(Instant delaiLimite) {
         this.delaiLimite = delaiLimite;
     }
 
