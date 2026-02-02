@@ -1,10 +1,11 @@
 package com.cpe.royaume.controller;
 
-import com.cpe.royaume.entity.ApiResponse;
 import com.cpe.royaume.entity.Quest;
-import com.cpe.royaume.repository.QuestRepository;
+import com.cpe.royaume.service.QuestExpiryService;
+import com.cpe.royaume.service.QuestStorageService;
 import com.cpe.royaume.service.RoyalService;
-import java.time.Instant;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,57 +17,31 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoyaumeController {
     private final Logger LOGGER = LoggerFactory.getLogger(RoyaumeController.class);
     private final RoyalService royalService;
-    private final QuestRepository questRepository;
+    private final QuestStorageService questStorageService;
+    private final QuestExpiryService questExpiryService;
 
-    public RoyaumeController(RoyalService royalService, QuestRepository questRepository) {
+    public RoyaumeController(
+            RoyalService royalService,
+            QuestStorageService questStorageService,
+            QuestExpiryService questExpiryService
+    ) {
         this.royalService = royalService;
-        this.questRepository = questRepository;
+        this.questStorageService = questStorageService;
+        this.questExpiryService = questExpiryService;
     }
 
     @GetMapping("/quests")
-    public ApiResponse getQuests() {
-        ApiResponse response = royalService.getQuests();
-
-        if (response == null) {
-            LOGGER.info("No response from RoyalService");
-            return null;
-        }
-
-        Quest quest = response.getQuest();
+    public List<Quest> getQuests() {
+        Quest quest = royalService.getQuests();
 
         if (quest == null) {
-            LOGGER.info("No quest available");
-            return null;
+            LOGGER.info("No quest returned by RoyalService");
+            return questStorageService.findAll();
         }
 
-        questRepository.save(quest);
+        questStorageService.save(quest);
+        questExpiryService.schedule(quest);
 
-        this.resolveQuest(quest);
-
-        return response;
-    }
-
-    private void resolveQuest(Quest quest) {
-        Instant currentDate = Instant.now();
-        // calculate delta in seconds
-        if (quest.getDelaiLimite() != null) {
-            float delta = (quest.getDelaiLimite().toEpochMilli() - currentDate.toEpochMilli()) / 1000f;
-            waitForDelai(quest, delta);
-        }
-    }
-
-    private void waitForDelai(Quest quest, float delta) {
-        // asynchronous sleeping for delta seconds
-        Thread.ofVirtual().start(() -> {
-            try {
-                Thread.sleep((long) (delta * 1000));
-                LOGGER.info("Quest {} has expired", quest.getId());
-                ApiResponse resolveQuest = royalService.resolveQuest(quest.getId());
-                LOGGER.info("Quest {} resolved with response: {}", quest.getId(), resolveQuest);
-            } catch (InterruptedException e) {
-                LOGGER.error("Error while waiting for quest to expire", e);
-                Thread.currentThread().interrupt();
-            }
-        });
+        return questStorageService.findAll();
     }
 }

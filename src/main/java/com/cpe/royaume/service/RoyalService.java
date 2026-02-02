@@ -1,9 +1,13 @@
 package com.cpe.royaume.service;
 
 import com.cpe.royaume.entity.ApiResponse;
+import com.cpe.royaume.entity.Quest;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +29,7 @@ public class RoyalService {
         this.group = group;
     }
 
-    public ApiResponse getQuests() {
+    public Quest getQuests() {
         ApiResponse response = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/quests")
@@ -35,7 +39,7 @@ public class RoyalService {
                 .bodyToMono(ApiResponse.class)
                 .block();
         LOGGER.debug("Response from getQuests: {}", response);
-        return response;
+        return response.getQuest();
     }
 
     public ApiResponse resolveQuest(final String questId) {
