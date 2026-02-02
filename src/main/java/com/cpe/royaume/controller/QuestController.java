@@ -1,7 +1,7 @@
 package com.cpe.royaume.controller;
 
 import com.cpe.royaume.domain.Quest;
-import com.cpe.royaume.service.QuestFlowService;
+import com.cpe.royaume.service.QuestManagerService;
 
 import java.util.List;
 
@@ -17,21 +17,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/royaume")
 public class QuestController {
-    private final QuestFlowService questFlowService;
+    private final QuestManagerService questManagerService;
 
-    public QuestController(QuestFlowService questFlowService) {
-        this.questFlowService = questFlowService;
+    public QuestController(QuestManagerService questManagerService) {
+        this.questManagerService = questManagerService;
     }
 
     @GetMapping("/quests")
     public List<Quest> getQuests() {
-        return questFlowService.findAllPendingQuests();
+        return questManagerService.findAllPendingQuests();
     }
 
     @PostMapping("/quests/{id}/launch")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<Void> launchQuest(@PathVariable String id) throws Exception {
-        questFlowService.scheduleQuest(id);
+        questManagerService.scheduleQuest(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }

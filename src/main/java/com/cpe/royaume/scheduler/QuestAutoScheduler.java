@@ -1,19 +1,19 @@
 package com.cpe.royaume.scheduler;
 
-import com.cpe.royaume.service.QuestFlowService;
+import com.cpe.royaume.service.QuestManagerService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
 public class QuestAutoScheduler {
-    private final QuestFlowService questFlowService;
+    private final QuestManagerService questManagerService;
 
-    public QuestAutoScheduler(QuestFlowService questFlowService) {
-        this.questFlowService = questFlowService;
+    public QuestAutoScheduler(QuestManagerService questManagerService) {
+        this.questManagerService = questManagerService;
     }
 
     @Scheduled(fixedDelayString = "${royaume.auto.fetch:30000}")
     public void run() {
-        questFlowService.fetchAndSaveQuests();
+        questManagerService.fetchAndSaveQuests();
     }
 }

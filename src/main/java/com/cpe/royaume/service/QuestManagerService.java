@@ -1,22 +1,22 @@
 package com.cpe.royaume.service;
 
-import com.cpe.royaume.domain.Quest;
 import com.cpe.royaume.client.RoyalApiClient;
-
-import java.util.List;
+import com.cpe.royaume.domain.Quest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class QuestFlowService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(QuestFlowService.class);
+public class QuestManagerService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuestManagerService.class);
 
     private final RoyalApiClient royalService;
     private final QuestStorageService questStorageService;
     private final QuestExpiryService questExpiryService;
 
-    public QuestFlowService(
+    public QuestManagerService(
             RoyalApiClient royalService,
             QuestStorageService questStorageService,
             QuestExpiryService questExpiryService
@@ -28,17 +28,15 @@ public class QuestFlowService {
 
     public void fetchAndSaveQuests() {
         Quest quest = royalService.getQuests();
-        
+
         if (quest == null) {
             LOGGER.info("No quest returned by RoyalApiClient");
             return;
         }
-        
+
         quest.setDelaiLimite(quest.getDelaiLimite().plusHours(1));
         questStorageService.save(quest);
     }
-
-
 
     public void scheduleQuests() {
         List<Quest> quests = questStorageService.findAllPendingQuests();

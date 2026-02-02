@@ -3,8 +3,9 @@ package com.cpe.royaume.service;
 import com.cpe.royaume.domain.EnumStatus;
 import com.cpe.royaume.domain.Quest;
 import com.cpe.royaume.repository.QuestRepository;
-import java.util.List;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class QuestStorageService {
