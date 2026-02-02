@@ -1,4 +1,4 @@
-package com.cpe.royaume.entity;
+package com.cpe.royaume.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

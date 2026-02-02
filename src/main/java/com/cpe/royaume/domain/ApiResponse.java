@@ -1,4 +1,4 @@
-package com.cpe.royaume.entity;
+package com.cpe.royaume.domain;
 
 public class ApiResponse {
     private String codeRetour;

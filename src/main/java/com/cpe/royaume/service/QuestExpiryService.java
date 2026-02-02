@@ -1,6 +1,7 @@
 package com.cpe.royaume.service;
 
-import com.cpe.royaume.entity.Quest;
+import com.cpe.royaume.client.RoyalApiClient;
+import com.cpe.royaume.domain.Quest;
 import java.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +13,9 @@ public class QuestExpiryService {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestExpiryService.class);
 
     private final TaskScheduler taskScheduler;
-    private final RoyalService royalService;
+    private final RoyalApiClient royalService;
 
-    public QuestExpiryService(TaskScheduler taskScheduler, RoyalService royalService) {
+    public QuestExpiryService(TaskScheduler taskScheduler, RoyalApiClient royalService) {
         this.taskScheduler = taskScheduler;
         this.royalService = royalService;
     }

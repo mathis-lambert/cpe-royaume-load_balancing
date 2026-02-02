@@ -1,25 +1,23 @@
-package com.cpe.royaume.service;
+package com.cpe.royaume.client;
 
-import com.cpe.royaume.entity.ApiResponse;
-import com.cpe.royaume.entity.Quest;
+import com.cpe.royaume.domain.ApiResponse;
+import com.cpe.royaume.domain.Quest;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
-public class RoyalService {
-    private final Logger LOGGER = LoggerFactory.getLogger(RoyalService.class);
+public class RoyalApiClient {
+    private final Logger LOGGER = LoggerFactory.getLogger(RoyalApiClient.class);
 
     private final WebClient webClient;
     private final String group;
 
-    public RoyalService(
+    public RoyalApiClient(
             @Value("${royaume.api.url}") String baseUrl,
             @Value("${royaume.ihm.group}") String group
     ) {

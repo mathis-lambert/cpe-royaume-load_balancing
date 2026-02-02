@@ -1,6 +1,6 @@
 package com.cpe.royaume.repository;
 
-import com.cpe.royaume.entity.Quest;
+import com.cpe.royaume.domain.Quest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
